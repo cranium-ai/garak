@@ -79,6 +79,9 @@ class Pipeline(Generator, HFCompatible):
             set_seed(_config.run.seed)
 
         pipeline_kwargs = self._gather_hf_params(hf_constructor=pipeline)
+        pipeline_kwargs.pop("device", None)
+        pipeline_kwargs["device_map"] = "auto"
+        print("pipeline_kwargs in garak's huggingface.py has 'device_map' hardcoded to 'auto'")
         self.generator = pipeline("text-generation", **pipeline_kwargs)
         if not hasattr(self, "deprefix_prompt"):
             self.deprefix_prompt = self.name in models_to_deprefix
