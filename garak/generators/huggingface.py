@@ -28,6 +28,8 @@ from garak.exception import ModelNameMissingError, GarakException
 from garak.generators.base import Generator
 from garak.resources.api.huggingface import HFCompatible
 
+import transformers
+
 models_to_deprefix = ["gpt2"]
 
 
@@ -79,6 +81,7 @@ class Pipeline(Generator, HFCompatible):
             set_seed(_config.run.seed)
 
         pipeline_kwargs = self._gather_hf_params(hf_constructor=pipeline)
+        pipeline_kwargs["tokenizer"] = transformers.AutoTokenizer.from_pretrained(pipeline_kwargs["model"])
         self.generator = pipeline("text-generation", **pipeline_kwargs)
         if not hasattr(self, "deprefix_prompt"):
             self.deprefix_prompt = self.name in models_to_deprefix
