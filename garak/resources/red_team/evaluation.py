@@ -4,7 +4,7 @@
 import re
 import tiktoken
 
-from . import conversation
+# from . import conversation
 from garak.generators.openai import context_lengths
 
 
